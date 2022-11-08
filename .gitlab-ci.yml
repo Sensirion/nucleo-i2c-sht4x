@@ -1,0 +1,10 @@
+stages:
+  - validate
+
+TODO_check:
+  stage: validate
+  image:
+      name: registry.gitlab.sensirion.lokal/mso-sw/drivers/docker-driver-generator:0.2.0
+  tags: [linux, docker]
+  script:
+    - '! grep -rnw --exclude=.gitlab-ci.yml --exclude-dir=.git --exclude-dir=nucleo_f103rb . -e "TODO"'

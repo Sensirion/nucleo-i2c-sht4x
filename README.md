@@ -1,92 +1,247 @@
-# nucleo-i2c-sht4x
+# Sensirion Nucleo I²C SHT4X Driver
+
+The repository provides a driver for setting up a sensor of the SHT4X family to run on a Nucleo F103RB board over I²C.
+
+<center><img src="images/SHT4x.png" width="300px"></center>
+
+Click [here](https://sensirion.com/products/catalog/SEK-SHT40/) to learn more about the Sensirion SHT4X sensor family.
 
 
 
-## Getting started
+## Supported sensor types
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+| Sensor name   | I²C Addresses  |
+| ------------- | -------------- |
+|[SHT40](https://sensirion.com/products/catalog/SHT40/)| **0x44**, 0x45|
+|[SHT41](https://sensirion.com/products/catalog/SHT41/)| **0x44**, 0x45|
+|[SHT45](https://sensirion.com/products/catalog/SHT45/)| **0x44**, 0x45|
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+The following instructions and examples use a *SHT40*.
 
-## Add your files
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
 
-```
-cd existing_repo
-git remote add origin https://gitlab.sensirion.lokal/MSO-SW/drivers/nucleo/nucleo-i2c-sht4x.git
-git branch -M master
-git push -uf origin master
-```
+## Connect the sensor to the Nucleo F103RB
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.sensirion.lokal/MSO-SW/drivers/nucleo/nucleo-i2c-sht4x/-/settings/integrations)
 
-## Collaborate with your team
+Your sensor has 4 different connectors: SDA, GND, SCL, VDD.
+Use the following pins to connect your SHT4X:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+| *SHT4X* | *Cable Color*  |   *Nucleo F103RB*   |
+| :----------------: | -------------- | ------------------ |
+| SDA | green | Pin PB_9
+| GND | black | Pin GND
+| SCL | yellow | Pin PB_8
+| VDD | red | Pin +3v3
 
-## Test and Deploy
 
-Use the built-in continuous integration in GitLab.
+<img src="images/nucleo-i2c-pinout.jpg" width="400px">
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-***
+**Note:**  *The Nucleo board does not contain internal pull-ups. Either you have a breakout board for your sensor 
+    that has pull-ups, or you have to add pull-ups by our own.
+    The provided setup assumes that ~5K pull-ups are installed. As the required pull-ups heavily depend on your actual 
+    hardware setup (e.g. length wires), it's a good thing to check the signals SCL and SDA with an oscilloscope.*
 
-# Editing this README
+### Detailed sensor pinout
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+<img src="images/SHT40_pinout.png" width="300px">
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+| *Pin* | *Cable Color* | *Name* | *Description*  | *Comments* |
+|-------|---------------|:------:|----------------|------------|
+| 1 | green | SDA | I2C: Serial data input / output | 
+| 2 | black | GND | Ground | 
+| 3 | yellow | SCL | I2C: Serial clock input | 
+| 4 | red | VDD | Supply Voltage | 1.1 to 3.6V
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### Using the SHT4X with a X-NUCLEO-IKS02A1 shield
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+If you have a X-NUCLEO-IKS02A1 expansion shield and the SHT4X mounted on a SENSEVAL-MKI4XV1 pcb you can
+plug it as shown in the following picture.
+<center>
+    <img src="images/X-NUCLEO-IKS02A1-SHT4X.png" width="300px">
+</center>
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+In this way you are assured that you have appropriate pull-ups.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+
+
+## Quick start example
+
+As with any embedded project, the setup is a bit more challenging than just building an application on a linux or windows host.
+
+First, we need a driver for the board. Next we need a compiler for the selected MCU and some tools to combine all steps
+that are needed to build a working image. We need an appropriate hardware setup.
+Finally, we need a tool to flash a successfully built image on the device and a serial terminal to see, if the code that we loaded 
+on the MCU does some meaningful things.
+
+In the rest of this section we will guide you through the process of setting up everything:
+
+- [Download and install the *ST-LINK Driver*](https://www.st.com/en/development-tools/stsw-link009.html):
+
+    This is the software you need to connect your Nucleo board with your PC.
+    You will need to register in order to download the driver.
+    (Used version for this setup: 2.0.2)
+
+- [Download and install the STM Cube Programmer](https://www.st.com/en/development-tools/stm32cubeprog.html):
+
+    This is the software that will load a built application onto the flash of the board.
+    (Used version for this setup: 2.11.0)
+
+
+- [Install the gnu arm embedded toolchain](https://developer.arm.com/downloads/-/gnu-rm):
+
+    The provided examples come with a makefile that uses the gnu toolchain for arm embedded.
+
+    <details><summary>Instructions for Windows users</summary>
+    <p>
+        In case you are working on Windows you will need to have access to a working gnu tool-set. 
+        This you can either achieve by installing [cygwin](https://www.cygwin.com/install.html) or more 
+        convenient [WSL](https://learn.microsoft.com/en-us/windows/wsl/install). 
+        [Mingw](https://www.mingw-w64.org) will work for compiling as well but `make clean` will fail since 
+        removing recursive directories is not properly supported.
+    </p>
+    </details>
+
+    
+
+
+- Download the SHT4X driver from [GitHub](https://github.com/Sensirion/nucleo-i2c-sht4x):
+
+    Extract the `.zip` on your PC.
+    The structure of the extracted zip file is described in more detail in the section [Folder structure](#folder-structure)
+
+
+- Check entries in the file `user_settings.mak`:
+
+    The file contains settings that are used by the build process and that may be specific to your installation.
+
+
+- Connect the hardware:
+
+   Connect the Nucleo board over USB to your PC and your sensor to new Nucleo board according to section 
+   [Connect the sensor](#connect-the-sensor-to-the-nucleo-f103rb).
+
+
+- Setup a serial terminal:
+    A serial terminal is required to get the output from your application. 
+    The serial terminal needs to use the virtual com port from the installed ST-LINK. The used settings are:
+
+        baud-rate = 115200
+        parity = None
+        data-bits = 8
+
+    The example applications will output ascii strings. Each line will be ended by a `'\n'` character.
+
+
+- Build and flash the application:
+    Open a terminal in the folder that contains this readme and the file `Makefile`.
+
+    By executing the command
+
+        make TARGET=example-usage flash
+
+    the example in the sub-folder `example-usage` will be built and directly flashed onto the Nucleo board.
+    The flashing will reset the board, and you should see the output of the application on your serial terminal.
+
+## Folder structure
+
+The provided driver package comes with ready to use
+examples. This includes a valid configuration and initialization of 
+the hardware and the Nucleo board.
+In case you want to extend the examples you may need to change that configuration. 
+Therefore, it is important to understand the folder structure of the driver package.
+
+The folder structure is as follows:
+
+    nucleo-i2c-SHT4X/
+        example-usage/
+        images/
+        nucleo_f103rb/
+            Drivers/
+            Core/
+        sensirion/
+
+The folder `images` contains images needed by this read-me and is not relevant for any application.
+The folder `example-usage` contains the default usage example. It depends on the objects that are built from the folder `sensirion` and `nucleo_f103rb`
+
+
+### Folder nucleo_f103rb
+
+The folder `nucleo_f103rb` contains the resources that where generated by the application 
+[STM32CubeMx](https://www.st.com/en/development-tools/stm32cubeprog.html). This application
+lets you define the hardware setup for a specific board and generate the source code with all configurations and drivers.
+
+The sub-folder `Drivers` contains the hardware drivers of peripherals and the sub-folder `Core` contains the setup and configuration for any
+example in this driver package.
+
+The configuration file `Nucleo_F103RB.ioc` used by the STM32CubeMx software is the base for all the provided artifacts within this folder.
+The current configuration includes the following choices for communication:
+
+- Select I2C block 1 and map it to PB_8  and PB_9.
+
+
+- Select UART block 2 and map it ot PA_2(TX) and PA_3(RX).
+
+  This selection will allow you to use the virtual COM port of the ST-LINK (over USB) 
+  to trace out print statements.
+
+
+To see the complete configuration install the program [SMT32CubeMx](https://www.st.com/en/development-tools/stm32cubeprog.html) 
+and open the file `Nucleo_F103RB.ioc`.
+
+
+The contents of the function `main()` and the initialization of the I2c peripheral `MX_I2C1_Init()` are not used as 
+generated in the folder `Core` but integrated in the file `sensirion_i2c_hal.c`.
+
+### Folder sensirion
+
+The folder sensirion contains the framework that is used by the usage examples. It provides functions to initialize the hardware and to communicate with the sensors.
+
+
+## Troubleshooting
+
+### Building or flashing driver failed
+
+- Make sure that all the prerequisites are properly installed.
+- Make sure that the settings in the file `user_settings.mak` are matching your installation. 
+- Check if the COM port used by the serial terminal corresponds to the COM port established by ST-LINK.
+
+### Communication with the sensor failed
+
+- Make sure that your sensor is properly connected to your board including appropriate pull-ups.
+
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+**Contributions are welcome!**
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+We develop and test this driver using our company internal tools (version
+control, continuous integration, code review etc.) and automatically
+synchronize the master branch with GitHub. But this doesn't mean that we don't
+respond to issues or don't accept pull requests on GitHub. In fact, you're very
+welcome to open issues or create pull requests :)
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+This Sensirion library uses
+[`clang-format`](https://releases.llvm.org/download.html) to standardize the
+formatting of all our `.c` and `.h` files. Make sure your contributions are
+formatted accordingly:
 
-## License
-For open source projects, say how it is licensed.
+The `-i` flag will apply the format changes to the files listed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```bash
+clang-format -i *.c *.h
+```
+
+Note that differences from this formatting will result in a failed build until
+they are fixed.
+
+
+
+# License
+
+See [LICENSE](LICENSE).
