@@ -2,7 +2,7 @@
 
 The repository provides a driver for setting up a sensor of the SHT4X family to run on a Nucleo F103RB board over I²C.
 
-<center><img src="images/SHT4x.png" width="300px"></center>
+<img src="images/SHT4x.png" width="300px">
 
 Click [here](https://sensirion.com/products/catalog/SEK-SHT40/) to learn more about the Sensirion SHT4X sensor family.
 
@@ -52,7 +52,7 @@ Use the following pins to connect your SHT4X:
 | 1 | green | SDA | I2C: Serial data input / output | 
 | 2 | black | GND | Ground | 
 | 3 | yellow | SCL | I2C: Serial clock input | 
-| 4 | red | VDD | Supply Voltage | 1.1 to 3.6V
+| 4 | red | VDD | Supply Voltage | 1.1V to 3.6V
 
 
 
@@ -61,9 +61,8 @@ Use the following pins to connect your SHT4X:
 
 If you have a X-NUCLEO-IKS02A1 expansion shield and the SHT4X mounted on a SENSEVAL-MKI4XV1 pcb you can
 plug it as shown in the following picture.
-<center>
-    <img src="images/X-NUCLEO-IKS02A1-SHT4X.png" width="300px">
-</center>
+
+<img src="images/X-NUCLEO-IKS02A1-SHT4X.png" width="300px">
 
 In this way you are assured that you have appropriate pull-ups.
 
