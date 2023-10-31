@@ -3,7 +3,7 @@
  *
  * Generator:     sensirion-driver-generator 0.33.0
  * Product:       sht4x
- * Model-Version: 2.0.1
+ * Model-Version: 2.0.2
  */
 /*
  * Copyright (c) 2023, Sensirion AG
