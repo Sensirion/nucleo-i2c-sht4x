@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2023-10-31
+Updated with latest Drvier Generator
+Added Metadata
+Improved buffer handling
+
+## [0.1.0] - 2022-11-08
 
 Initial release
 
