@@ -178,14 +178,14 @@ uint16_t sensirion_i2c_add_command_to_buffer(uint8_t* buffer, uint16_t offset,
 }
 
 uint16_t sensirion_i2c_add_command16_to_buffer(uint8_t* buffer, uint16_t offset,
-                                             uint16_t command) {
+                                               uint16_t command) {
     buffer[offset++] = (uint8_t)((command & 0xFF00) >> 8);
     buffer[offset++] = (uint8_t)((command & 0x00FF) >> 0);
     return offset;
 }
 
 uint16_t sensirion_i2c_add_command8_to_buffer(uint8_t* buffer, uint16_t offset,
-                                             uint8_t command) {
+                                              uint8_t command) {
     buffer[offset++] = command;
     return offset;
 }
